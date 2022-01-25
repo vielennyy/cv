@@ -1,59 +1,59 @@
-function next_birthday(num_month){
+function next_birthday(horizont){
     //array whith objects (employees)
-    arr_emp = [{name:'Lina', lastname:'Marchenko', date:12, month:1, year:2000},
-                {name:'Ivan', lastname:'Pavlenko', date:4, month:2, year:1997},
-                {name:'Marina', lastname:'Kornienko', date:19, month:1, year:2003},
-                {name:'Ruslan', lastname:'Kuzmenko', date:27, month:3, year:2002},
-                {name:'Volodymyr', lastname:'Osaulenko', date:16, month:2, year:1900}];
+    let employees = [{person:'Lina Marchenko', date:12, month:1, year:2000},
+                {person:'Ivan Pavlenko', date:4, month:2, year:1997},
+                {person:'Marina Kornienko', date:19, month:1, year:2003},
+                {person:'Ruslan Kuzmenko', date:27, month:3, year:2002},
+                {person:'Volodymyr Osaulenko', date:16, month:2, year:1900}];
     
     let current_year = 2022;
-    //sort employees to arrays with month of birth
-
-    //ceate an arrays
-    const january = [];
-    const february = [];
-    const march = [];
-    //fill arrays with employees            
-    for (var i = 0; i < arr_emp.length; i ++){
-        if (arr_emp[i].month == '1'){
-            january.push(arr_emp[i]);  
+    let current_month = 0;
+    let array_month_keys = [
+        `January ${current_year}`,
+        `February ${current_year}`,
+        `March ${current_year}`,
+        `April ${current_year}`,
+        `May ${current_year}`,
+        `June ${current_year}`,
+        `July ${current_year}`,
+        `August ${current_year}`,
+        `September ${current_year}`,
+        `October ${current_year}`,
+        `November ${current_year}`,
+        `December ${current_year}`
+    ];
+   
+    let employees_map = new Map();
+    let temp = [];
+    //fill arrays with employees 
+    // for (var j = current_month; j <= horizont; j++){
+        for (var i = 0; i < employees.length; i ++){
+            temp = [];
+            if (!(employees_map.has(employees[i].month))){
+                temp.push(employees[i]);
+                employees_map.set(employees[i].month, employees[i]);
             }
-        else if (arr_emp[i].month == 2){
-            february.push(arr_emp[i]);
+            else {
+                temp.push(employees_map.get(employees[i].month));
+                temp.push(employees[i]);
+                temp.sort(function(a, b) {
+                    return a.date - b.date;
+                });
+                employees_map.set(employees[i].month, temp);
             }
-        else if (arr_emp[i].month == 3){
-            march.push(arr_emp[i]);
-            }
-    }
-    //rewiew
-    // console.log(january);
-    // console.log(february);
-    // console.log(march);
+        } 
+        for (var i = current_month; i <= horizont; i++){
+            console.log(`${array_month_keys[i]}`);
+            console.log(employees_map.get(employees[i].month));
+            // let str = Object.values(employees_map.get(employees[i].month));
+            // console.log(str);
 
-    //sort employees in the each array with day of birth
-    january.sort(function(a, b) {
-        return a.date - b.date;
-      });
-    february.sort(function(a, b) {
-        return a.date - b.date;
-      });  
-    march.sort(function(a, b) {
-        return a.date - b.date;
-      });
-    //rewiew
-    console.log(january);
-    console.log(february);
-    console.log(march);
-
-    let employees = new Map();
-      employees.set(`January ${current_year}`, january);
-      employees.set(`February ${current_year}`, february);
-      employees.set(`March ${current_year}`, march);
-
-    console.log(employees);
+            // console.log(JSON.stringify(employees_map.get(employees[i].month)));
+        }        
+    // console.log(employees_map);
 
 
+    
 }
 
-next_birthday(3);
-    
+next_birthday(1);
