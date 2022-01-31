@@ -3,6 +3,7 @@ const net = require('net');
 
 const clients = [];
 var previousCity;
+var flag = true;
 
 
 const server = net.createServer(function (socket) {
@@ -35,8 +36,14 @@ const server = net.createServer(function (socket) {
             clients.forEach(client => client.write('The end.'));
         }
         else {
-            previousCity = message.toString().trim().toUpperCase();
-            socket.write(previousCity);
+            if (flag){
+                previousCity = message.toString().trim().toUpperCase();
+            }
+            else{
+                flag = true;
+            }
+            
+            // socket.write(previousCity);
         }
         count ++;
     });
@@ -58,17 +65,18 @@ function runGame(message, socket, count, enteredCities, previousCity) {
     else {
         if (count == 1) {
             enteredCities.set(city, 1);
-            
+            // previousCity = city;
             // socket.write(previousCity);
             socket.write('Please enter your city: ');
             return true;
         }
         else { 
             if (checkRepeat(enteredCities, city, socket)){
-                socket.write(previousCity);
+                // socket.write(previousCity);
                 if (checkNextCity(previousCity, city, socket)){
-                    enteredCities.set(city, 1);
-                    previousCity = city;
+                    // socket.write(previousCity);
+                    // enteredCities.set(city, 1);
+                    // previousCity = city;
                     socket.write('Please enter your city: ');
                     return true;
                 }
@@ -97,12 +105,14 @@ function checkRepeat(enteredCities, city, socket) {
 function checkNextCity(previousCity, currentCity, socket) {
     splitpreviousCity = previousCity.split('');
     splitcurrentCity = currentCity.split('');
-    if (splitpreviousCity[splitpreviousCity.length - 1] == splitcurrentCity[0]) {
-        socket.write('Your city must start with the last letter of the previous one!\n');
-        return false;
+    if (splitpreviousCity[splitpreviousCity.length - 1] === splitcurrentCity[0]) {
+        return true;
     }
     else {
-        return true;
+        
+        socket.write('Your city must start with the last letter of the previous one!\n');
+        flag = false;
+        return false;
     }
 }
 
